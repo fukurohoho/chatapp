@@ -5,7 +5,7 @@ git push -u origin fukutani-honoka
 
 # 2回目以降 push のためのコマンド
 git add .
-git commit -m 'commit message'
+git commit -m 'almost-signup'
 git push
 
 # 仮想環境に入る
@@ -15,3 +15,6 @@ source .venv/bin/activate
 # キャッシュ削除 -> Ctrl + Shift + R
 
 python3 manage.py runserver
+
+python3 manage.py makemigrations
+python3 manage.py migrate

@@ -1,0 +1,85 @@
+/* 検索ワード：レスポンシブ対応 */
+
+*{
+    font-size: 35px;
+    color: white;
+    background-color: brown;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 480px) {
+	/* 480px以下に適用されるCSS（スマホ用） */
+    *{
+        font-size: 20px;
+        color: white;
+        background-color: brown;
+        cursor: pointer;
+
+        /* if文も書けるらしい */
+    }
+}
+
+
+h1{
+    height:70px;
+    line-height: 70px;
+    font-size: 9vw;
+    text-align: center;
+}
+
+.formdiv{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    align-items: center;
+}
+
+input{
+    /* ボタンデザイン：https://webparts.cman.jp/button/submit/ */
+    /* サイズの単位：https://www.sejuku.net/blog/57197 */ 
+    display:inline;
+    width: 60%;   
+    border-width: 3px;
+}
+
+label{
+    display: inline-block;
+    text-align: left;
+    width: 43%;
+    margin-right: 5px;
+}
+
+.field-container{
+    margin: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+
+.buttons{
+    margin-bottom: 10px;
+    display: inline-block;
+    text-align: center;
+    width:100%;
+}
+
+#Image{
+    font-size:15px;
+    width: 53%;
+}
+
+#button1, #button2{
+    width: 35%;
+    height: 50%;
+    margin-right: 10px;
+    margin-left: 10px;
+    padding: 10px;
+    vertical-align: middle;
+}
+
+.errorlist{
+    text-align: right;
+    margin-bottom: 5px;
+    color: yellow;
+}
