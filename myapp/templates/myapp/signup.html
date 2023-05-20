@@ -11,12 +11,9 @@
         Sign Up Form
     </h1>
     <div class="formdiv">
-        <form action="{% url 'registration' %}" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}  {# CSRF 対策 #}               
-            {% if error_message %}  {# もしエラーがあれば #}
-            <p><strong>{{ error_message }}</strong></p>  {# エラーを表示する #}
-            {% endif %}
-
+        <form action="{% url 'signup_view' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}  {# CSRF 対策 #} 
+            
             {% for elem in form %}
             <div class="field-container">{{elem.label_tag}}{{elem}}</div>
             {{ elem.non_field_errors }}
@@ -24,7 +21,7 @@
             {% if elem.errors %}
                 <div class="errorlist">
                     {% for error in elem.errors %}
-                        {{ error }}<br>
+                        ★ {{ error }}<br>
                     {% endfor %}
                 </div>
             {% endif %}
