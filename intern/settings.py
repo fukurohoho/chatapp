@@ -132,7 +132,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # signup form
-MEDIA_URL = '/media/'
+MEDIA_URL = '/media_local/'
 MEDIA_ROOT = BASE_DIR / 'media_local'
 AUTH_USER_MODEL = "myapp.CustomUser"
 

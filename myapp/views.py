@@ -6,6 +6,21 @@ from .models import CustomUser
 from .forms import myUserForm, myLoginForm
 from django.contrib.auth.views import LoginView
 
+from PIL import Image
+
+def trimming_square(imgpath):
+    img = Image.open(imgpath)
+    new_size = min(img.width, img.height)
+    center_x = int(img.width / 2)
+    center_y = int(img.height / 2)
+
+    img_crop = img.crop((center_x - new_size / 2, center_y - new_size / 2, center_x + new_size / 2, center_y + new_size / 2))
+    img_crop.save(imgpath)
+
+    print("******** Trimming Completed. *************")
+
+
+
 def index(request):
     return render(request, "myapp/index.html")
 
@@ -15,8 +30,16 @@ def signup_view(request):
 
         if form.is_valid():
             print("************VALID*********************")
+            new_username = request.POST["username"]
+
             data = form.cleaned_data
+            # CustomUser.objects.get(username="user04").delete()
+
             form.save()
+            new_user = CustomUser.objects.get(username=new_username)
+            picpath = new_user.image.url
+            trimming_square("./"+picpath[1:]) # 正方形じゃない画像はトリミングする
+
             return render(request, "myapp/ok.html")
 
         else:
@@ -24,11 +47,9 @@ def signup_view(request):
             return render(request, "myapp/signup.html", {'form': form})
 
     else:
-        print(CustomUser.objects.all())
-
-        print("******************NOT POST *****************")
+        print("******************NOT POST*****************")
         form = myUserForm()
-        return render(request, "myapp/signup.html", {'form': form, 'error':"ログインに失敗しました"})
+        return render(request, "myapp/signup.html", {'form': form})
 
 def login_view(request):
     if request.POST:
@@ -36,7 +57,7 @@ def login_view(request):
 
         if form.is_valid():
             print("************Login Sccess*********************")
-            return render(request, "myapp/ok.html")
+            return friends(request)
 
         else:
             print("************Login Failed*********************")
@@ -47,8 +68,13 @@ def login_view(request):
         form = myLoginForm()
         return render(request, "myapp/login.html", {'form': form})
 
-def friends(request):
-    return render(request, "myapp/friends.html")
+def friends(request):    
+    myusername = request.POST["username"]
+    user_all = CustomUser.objects.all()
+    
+    user_li = [{"username": user.username, "image": user.image.url} for user in user_all if user.username != myusername]
+
+    return render(request, "myapp/friends.html", {"username": myusername, "friends": user_li})
 
 def talk_room(request):
     return render(request, "myapp/talk_room.html")

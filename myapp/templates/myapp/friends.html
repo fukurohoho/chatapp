@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat-App Friend</title>
+    <link rel="stylesheet" href='../static/myapp/css/friends.css'>
+</head>
+
+<header>
+    <h1>
+        Friend
+    </h1>
+</header>
+
+<body>
+    <div class="youare">You are {{ username }}</div>
+
+    <form action="{% url 'login_view' %}" method="POST">
+        {% csrf_token %}  {# CSRF 対策 #} 
+        
+        {% for user in friends %}
+        <div class="list">
+            <span class="icon_p"><input type="image" src="{{ user.image }}" alt="go" id="icon"></span>
+            <span class="name">{{ user.username }}</span>
+        </div>
+        {% endfor %}
+    </form>
+    <form action="{% url 'index' %}">
+        <p class="buttons">
+            <input type="submit" value="Log out" id="button2">
+        </p>
+    </form>
+</body>
+<footer>
+    <span>
+        <form action="{% url 'friends' %}">
+            <input type="submit" value="Friends">
+        </form>
+    </span>
+    <span>
+        <form action="{% url 'index' %}">
+            <input type="submit" value="Settings">
+        </form>
+    </span>
+</footer>
+</html>
