@@ -7,3 +7,4 @@ class CustomUser(AbstractUser):
     # email = forms.EmailField()
     # password = forms.Charfield(widget=forms.PasswordInput,validators=[MinLengthValidator(6)])
     image = models.ImageField(upload_to=None, height_field=None, width_field=None)
+
