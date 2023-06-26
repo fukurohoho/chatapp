@@ -1,4 +1,4 @@
-from .models import CustomUser
+from .models import CustomUser, Talk_content, Content
 from django.contrib.auth.forms import UserCreationForm
 from django.db import models
 from django import forms
@@ -28,3 +28,32 @@ class myLoginForm(AuthenticationForm):
 
     class Meta:
         model = CustomUser
+
+class ChatInputForm(forms.ModelForm):
+    class Meta:
+        model = Talk_content
+        # exclude = ["user_from", "user_to"]
+        fields = ("user_from","user_to","chat_content",)
+
+    """
+    def __init__(self, user_from=None, user_to=None, chat_content=None, *args, **kwargs,):
+        print(f"user_from: {user_from}    user_to:  {user_to}  content: {chat_content}")
+        self.user_from = user_from
+        self.user_to = user_to
+        self.chat_content = chat_content
+        super().__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        if self.chat_content == "":
+            return
+        obj = super().save(commit=False)
+        if self.user_from:
+            obj.user_from = self.user_from
+        if self.user_to:
+            obj.user_to = self.user_to
+        if self.chat_content:
+            obj.chat_content = self.chat_content
+        if commit:
+            obj.save()
+        return obj
+    """

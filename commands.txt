@@ -5,7 +5,7 @@ git push -u origin fukutani-honoka
 
 # 2回目以降 push のためのコマンド
 git add .
-git commit -m 'almost-signup'
+git commit -m 'half-friend'
 git push
 
 # 仮想環境に入る
@@ -14,7 +14,9 @@ source .venv/bin/activate
 # 開発者ツール -> Ctrl + Shift + I
 # キャッシュ削除 -> Ctrl + Shift + R
 
-python3 manage.py runserver
+python3 manage.py createsuperuser
 
 python3 manage.py makemigrations
 python3 manage.py migrate
+
+python3 manage.py runserver

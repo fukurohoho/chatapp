@@ -1,1 +1,47 @@
-TR
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat-App TalkRoom</title>
+    <link rel="stylesheet" href='../../static/myapp/css/talk_room.css'>
+</head>
+
+<header>
+    <h1>
+       {{ to_username }}
+    </h1>
+</header>
+
+<body>
+    {% csrf_token %}  {# CSRF 対策 #} 
+    
+    <div class="contents">
+        {% for content in messages %}
+        <div class="list">
+            <div class="name" id="from"> >{{ content.from }} </div>
+            <div class="name" id="time">{{ content.time|date:"m/d H:i" }}</div>
+            <div class="name" id="message">{{ content.message }}</div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <form class="message_form" action="{% url 'talk_room' myid your_id %}" method="POST">  
+        {% csrf_token %}  {# CSRF 対策 #} 
+    
+        <p class="field-container">{{form.chat_content}}</p>
+
+        <p class="buttons">
+            <input type="submit" value="submit" id="button1">
+        </p>
+    </form>
+    
+</body>
+<footer>
+    <p>
+        <form action="{% url 'login_view' %}">
+            <input type="submit" value="Back">
+        </form>
+    </p>
+</footer>
+</html>

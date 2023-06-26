@@ -3,8 +3,20 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class CustomUser(AbstractUser):
-    # user_name = forms.Charfield()
-    # email = forms.EmailField()
-    # password = forms.Charfield(widget=forms.PasswordInput,validators=[MinLengthValidator(6)])
     image = models.ImageField(upload_to=None, height_field=None, width_field=None)
+
+class Content(models.Model):
+    chat_content = models.CharField(max_length=2048)
+
+class Talk_content(models.Model):
+    #users = models.ForeignKey(Talk_content, on_delete=models.CASCADE)
+    user_from = models.CharField(max_length=255)
+    user_to = models.CharField(max_length=255)
+
+    chat_content = models.CharField(max_length=2048)#ForeignKey(Content, on_delete=models.CASCADE)
+
+    time = models.DateTimeField(auto_now_add=True)
+
+    def get_content(self, **kwargs):
+        friend_name = kwargs.get("username")
 

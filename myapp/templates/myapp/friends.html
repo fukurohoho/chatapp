@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat-App Friend</title>
-    <link rel="stylesheet" href='../static/myapp/css/friends.css'>
+    <link rel="stylesheet" href='../../static/myapp/css/friends.css'>
 </head>
 
 <header>
@@ -16,16 +16,17 @@
 <body>
     <div class="youare">You are {{ username }}</div>
 
-    <form action="{% url 'login_view' %}" method="POST">
         {% csrf_token %}  {# CSRF 対策 #} 
         
         {% for user in friends %}
-        <div class="list">
-            <span class="icon_p"><input type="image" src="{{ user.image }}" alt="go" id="icon"></span>
-            <span class="name">{{ user.username }}</span>
-        </div>
+        <form action="{% url 'talk_room' id user.id %}" method=""POST>
+            <div class="list">
+                    <span class="icon_p"><input action="{% url 'talk_room' id user.id %}" type="image" src="{{ user.image }}" alt="go" id="icon"></span>
+                <span class="name">{{ user.username }}</span>
+            </div>
+        </form>
         {% endfor %}
-    </form>
+        
     <form action="{% url 'index' %}">
         <p class="buttons">
             <input type="submit" value="Log out" id="button2">
