@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat-App Top</title>
-    <link rel="stylesheet" href='../static/myapp/css/index.css'>
+    <link rel="stylesheet" href='../../static/myapp/css/index.css'>
 </head>
 <body>
     <h1>
         課題１：チャットアプリ
     </h1>
     <div class="button">
-        <form action="login"><input type="submit" value="Log in"></form>
-        <form action="signup"><input type="submit" value="Sign up"></form>
+        <form action="{% url 'login_view' %}"><input type="submit" value="Log in"></form>
+        <form action="{% url 'signup_view' %}"><input type="submit" value="Sign up"></form>
     </div>
 </body>
 </html>

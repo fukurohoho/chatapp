@@ -3,7 +3,7 @@ from django.contrib.auth.password_validation import validate_password # 以下�
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser, Talk_content
-from .forms import myUserForm, myLoginForm, ChatInputForm
+from .forms import myUserForm, myLoginForm, ChatInputForm, ChangeUserForm, ChangeEmailForm, ChangeIconForm, ChangePWForm
 from django.contrib.auth.views import LoginView
 from django.db.models import Q
 from PIL import Image
@@ -56,7 +56,10 @@ def login_view(request):
 
         if form.is_valid():
             print("************Login Sccess*********************")
-            return friends(request)
+            username = request.POST["username"]
+            id = CustomUser.objects.get(username=username).id
+            print("******", id)
+            return friends(request, id)
 
         else:
             print("************Login Failed*********************")
@@ -67,12 +70,36 @@ def login_view(request):
         form = myLoginForm()
         return render(request, "myapp/login.html", {'form': form})
 
-def friends(request):    
-    myusername = request.POST["username"]
+def friends(request, id):
+    if id:
+        myusername = CustomUser.objects.get(id=id).username
+
+    if request.POST:
+        myusername = request.POST["username"]
+
     myid = CustomUser.objects.get(username=myusername).id
-    user_all = CustomUser.objects.all()
-    
-    user_li = [{"username": user.username, "image": user.image.url, "id": user.id} for user in user_all if user.username != myusername]
+
+    user_all = CustomUser.objects.all()    
+    user_li = []
+    for user in user_all:
+        if user.username == myusername or user.username == 'admin':
+            continue
+        
+        # 最後のトークを取ってくる 
+        contents = Talk_content.objects.filter(Q(user_to=myid, user_from=user.id)|Q(user_to=user.id, user_from=myid))
+
+        messages = []
+        for content_ in contents:
+            if content_.chat_content == "":
+                continue
+            messages.append({"time": content_.time, "message": content_.chat_content})
+        messages = sorted(messages, key=lambda x: x['time'])
+        if len(messages) == 0:
+            lasttalk = ""
+        else:
+            lasttalk = messages[-1]['message']
+
+        user_li.append({"username": user.username, "image": user.image.url, "id": user.id, "lasttalk": lasttalk})
 
     return render(request, "myapp/friends.html", {"id": myid, "username": myusername, "friends": user_li})
 
@@ -82,11 +109,7 @@ def talk_room(request, id1, id2):
 
     if request.POST:
         chat_content = request.POST["chat_content"]
-        # request.POST["user_from"] = user1
-        # request.POST["user_to"] = user2
-        print(type(chat_content))
-        new_message = ChatInputForm({"user_from": user1, "user_to": user2, "chat_content": chat_content})# | request.POST)
-        print(f"POST {request.POST}")
+        new_message = ChatInputForm({"user_from": id1, "user_to": id2, "chat_content": chat_content})
         if new_message.is_valid():
             print("***VALID******")
             new_message.save()
@@ -95,23 +118,16 @@ def talk_room(request, id1, id2):
 
             #new_message.save()
     # talkroom 表示
-    contents = Talk_content.objects.filter(Q(user_to=user1, user_from=user2)|Q(user_to=user2, user_from=user1))
+    contents = Talk_content.objects.filter(Q(user_to=id1, user_from=id2)|Q(user_to=id2, user_from=id1))
 
     messages = []
     for content_ in contents:
         if content_.chat_content == "":
             continue
-        messages.append({"time": content_.time, "from": content_.user_from, "to": content_.user_to, "message": content_.chat_content})
+        messages.append({"time": content_.time, "from": CustomUser.objects.get(id=content_.user_from).username, "to": CustomUser.objects.get(id=content_.user_to).username, "message": content_.chat_content})
     messages = sorted(messages, key=lambda x: x['time'])
 
-    for i in range(len(messages)):
-        #messages[i]["time"] = messages[i]["time"].strftime("%m/%d %H:%M")
-        pass
-
-
     form = ChatInputForm()
-    #print(f"messages:  {messages}")
-    #print(type(messages[0]["time"]))
     data = {
         "myusername": user1,
         "myid": id1,
@@ -122,5 +138,88 @@ def talk_room(request, id1, id2):
     }
     return render(request, "myapp/talk_room.html", data)
 
-def setting(request):
-    return render(request, "myapp/setting.html")
+def setting(request, id, what):
+    data = {"id": id, "what": what}
+    now_user = CustomUser.objects.get(id=id)
+    username = now_user.username
+
+    # default
+    if what == 0:
+        return render(request, "myapp/setting.html", data | {"content": "Username"})
+    
+    # change username
+    if what == 1: 
+        if request.POST:
+            new = request.POST["username"]
+            form = ChangeUserForm(request.POST)
+
+            if form.is_valid():
+                print("********VALID*********")
+                now_user.username = new
+                now_user.save()
+                return render(request, "myapp/change_complete.html", data | {"content": "Username"})
+            else:
+                return render(request, "myapp/setting_change.html", data | {"form": form, "content": "Username"})
+        else:
+            form = ChangeUserForm()
+            return render(request, "myapp/setting_change.html", data | {"form": form, "content": "Username"})
+    
+    # change email address
+    if what == 2: 
+        if request.POST:
+            new = request.POST["email"]
+            form = ChangeEmailForm(request.POST)
+
+            if form.is_valid():
+                print("********VALID*********")
+                now_user.email = new
+                now_user.save()
+                return render(request, "myapp/change_complete.html", data | {"content": "Email"})
+            else:
+                return render(request, "myapp/setting_change.html", data | {"form": form, "content": "Email"})
+        else:
+            form = ChangeEmailForm()
+            return render(request, "myapp/setting_change.html", data | {"form": form, "content": "Email"})
+
+    # change icon   
+    if what == 3: 
+        if request.POST:
+            new = request.FILES["image"]
+            print(f"************{new}****")
+            form = ChangeIconForm(request.POST, request.FILES)
+
+            if form.is_valid():
+                print("********VALID*********")
+                now_user.image = new
+                now_user.save()
+                picpath = now_user.image.url
+                trimming_square("./"+picpath[1:]) # 正方形じゃない画像はトリミングする
+                return render(request, "myapp/change_complete.html", data | {"content": "Icon"})
+            else:
+              return render(request, "myapp/setting_change.html", data | {"form": form, "content": "Icon"})
+        else:
+            form = ChangeIconForm()
+            return render(request, "myapp/setting_change.html", data | {"form": form, "content": "Icon"})
+
+        pass
+    # change password
+    if what == 4:
+        form = ChangePWForm(user=now_user, data=request.POST)
+        if request.POST:
+            print(request.POST, request.user,username)
+
+            if form.is_valid():
+                print("********VALID*********")
+                form.save()
+                return render(request, "myapp/change_complete.html", data | {"content": "Password"})
+            else:
+                print("********INVALID*********")
+                return render(request, "myapp/setting_change.html", data | {"form": form, "content": "Password"})
+
+        else:
+            form = ChangePWForm(user=now_user)
+            return render(request, "myapp/setting_change.html", data | {"form": form, "content": "Password"})
+
+
+
+    return render(request, "myapp/setting.html", data)

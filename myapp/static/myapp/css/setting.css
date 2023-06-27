@@ -1,0 +1,138 @@
+/* 検索ワード：レスポンシブ対応 */
+
+*{
+    font-size: 35px;
+    color: white;
+    background-color: brown;
+    cursor: pointer;
+    overflow: visible;
+}
+
+@media screen and (max-width: 480px) {
+	/* 480px以下に適用されるCSS（スマホ用） */
+    *{
+        font-size: 20px;
+        color: white;
+        background-color: brown;
+        cursor: pointer;
+        overflow: visible;
+
+        /* if文も書けるらしい */
+    }
+}
+
+body{
+    overflow: auto;
+    padding-bottom: 50px;
+}
+
+h1{
+    height:70px;
+    line-height: 70px;
+    font-size: 9vw;
+    text-align: center;
+}
+
+.formdiv{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    align-items: center;
+}
+
+input{
+    /* ボタンデザイン：https://webparts.cman.jp/button/submit/ */
+    /* サイズの単位：https://www.sejuku.net/blog/57197 */ 
+    width: 80%;   
+    border-width: 3px;
+    height: 70%;
+}
+
+.name{
+    padding: 5px;
+    text-align: left;
+    margin-left: 5px;
+    vertical-align: top;
+}
+
+#message{
+    margin-left: 20px;
+    font-size: larger;
+    padding: 0px;
+    width: 100%;
+}
+
+#time{
+    text-align: right;
+}
+
+.button{
+    width:70%;
+    height: 100%;
+    vertical-align: middle;
+    text-align: center;
+    margin: auto;
+    margin-top: 100px;
+}
+
+.setting-button{
+    padding: 15px;
+    padding-left: 0px;
+    width: 100%;
+    text-align: center;
+}
+
+.setting-button input{
+    border-radius: 5%;
+    padding: 10px;
+    line-height: 1em;
+    text-align: center;
+    border-width: 3px;
+}
+
+header{
+    position: fixed;
+    height: 80px;
+    top: 0px;
+    left: 0px;
+    margin: 0px 0px 15px 0px;
+    width: 100%;
+    padding: 0px;
+    justify-content: center;
+    background-color: white;
+    color: brown;
+}
+header h1{
+    width: 100%;
+    text-align: center;
+    margin: 5px;
+    background-color: white;
+    color: brown;
+}
+
+footer{
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    display: flex;
+    width: 100%;
+    padding: 5px 0px;
+    background-color: white;
+    color: brown;
+    justify-content: center;
+}
+footer span{
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    background-color: white;
+    color: brown;
+    padding: 5px 0px;
+}
+
+footer form, footer input{
+    width: 100%;
+    height: 100%;
+    border-style:none;
+    background-color: white;
+    color:brown;
+}

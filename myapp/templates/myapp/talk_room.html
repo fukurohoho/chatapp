@@ -19,7 +19,7 @@
     <div class="contents">
         {% for content in messages %}
         <div class="list">
-            <div class="name" id="from"> >{{ content.from }} </div>
+            <div class="name" id="from"> > {{ content.from }} </div>
             <div class="name" id="time">{{ content.time|date:"m/d H:i" }}</div>
             <div class="name" id="message">{{ content.message }}</div>
         </div>
@@ -39,7 +39,7 @@
 </body>
 <footer>
     <p>
-        <form action="{% url 'login_view' %}">
+        <form action="{% url 'friends' myid %}">
             <input type="submit" value="Back">
         </form>
     </p>

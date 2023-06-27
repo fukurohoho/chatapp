@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat-App Setting</title>
+    <link rel="stylesheet" href='../../static/myapp/css/setting_content.css'>
+</head>
+
+
+<header>
+    <h1>
+       {{ content }}
+    </h1>
+</header>
+
+<body>
+    <h1>
+        
+    </h1>
+    <div class="formdiv">
+        <form action="{% url 'setting' id what %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}  {# CSRF 対策 #} 
+            
+            {% for elem in form %}
+
+                {% if elem.errors %}
+                    <div class="errorlist">
+                        {% for error in elem.errors %}
+                            ★ {{ error }}<br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="field-container">{{elem.label_tag}}{{elem}}</div>
+            {% endfor %}
+
+            {% if form.non_field_errors %}
+                <div class="errorlist">
+                    {% for error in form.non_field_errors %}
+                        ★ {{ error }}<br>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <p class="buttons">
+                <input type="submit" value="submit" id="button1">
+            </p>
+        </form>
+        <form action="{% url 'setting' id 0 %}">
+            <p class="buttons">
+                <input type="submit" value="Back" id="button2">
+            </p>
+        </form>
+    </div>
+</body>
+
+
+<footer>
+    <span>
+        <form action="{% url 'friends' id %}">
+            <input type="submit" value="Friends">
+        </form>
+    </span>
+    <span>
+        <form action="{% url 'setting' id 0 %}">
+            <input type="submit" value="Settings">
+        </form>
+    </span>
+</footer>
+
+
+{# https://blog.narito.ninja/detail/98/ #}
+</html>

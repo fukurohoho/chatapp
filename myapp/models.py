@@ -10,8 +10,8 @@ class Content(models.Model):
 
 class Talk_content(models.Model):
     #users = models.ForeignKey(Talk_content, on_delete=models.CASCADE)
-    user_from = models.CharField(max_length=255)
-    user_to = models.CharField(max_length=255)
+    user_from = models.IntegerField()
+    user_to = models.IntegerField()
 
     chat_content = models.CharField(max_length=2048)#ForeignKey(Content, on_delete=models.CASCADE)
 

@@ -21,8 +21,9 @@
         {% for user in friends %}
         <form action="{% url 'talk_room' id user.id %}" method=""POST>
             <div class="list">
-                    <span class="icon_p"><input action="{% url 'talk_room' id user.id %}" type="image" src="{{ user.image }}" alt="go" id="icon"></span>
-                <span class="name">{{ user.username }}</span>
+                <div class="icon_p"><input action="{% url 'talk_room' id user.id %}" type="image" src="{{ user.image }}" alt="go" id="icon"></div>
+                <div class="name">{{ user.username }}</div>
+                <div class="name">{{ user.lasttalk }}</div>
             </div>
         </form>
         {% endfor %}
@@ -35,12 +36,12 @@
 </body>
 <footer>
     <span>
-        <form action="{% url 'friends' %}">
+        <form action="{% url 'friends' id %}">
             <input type="submit" value="Friends">
         </form>
     </span>
     <span>
-        <form action="{% url 'index' %}">
+        <form action="{% url 'setting' id 0 %}">
             <input type="submit" value="Settings">
         </form>
     </span>
