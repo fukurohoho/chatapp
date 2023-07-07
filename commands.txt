@@ -22,3 +22,5 @@ python3 manage.py migrate
 python3 manage.py runserver
 
 git@github.com:fukurohoho/chatapp.git
+
+ssh -i  ~/.ssh/chatapp-fukutani.pem ubuntu@35.74.158.8
