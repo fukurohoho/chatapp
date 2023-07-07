@@ -21,4 +21,4 @@ python3 manage.py migrate
 
 python3 manage.py runserver
 
-git remote set-url origin git@github.com:fukurohoho/chatapp.git
+git@github.com:fukurohoho/chatapp.git
